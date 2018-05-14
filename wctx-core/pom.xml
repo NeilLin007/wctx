@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>wctx</artifactId>
+        <groupId>com.cn.wctx</groupId>
+        <version>${project-version}</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>wctx-core</artifactId>
+    <dependencies>
+        <dependency>
+            <groupId>com.cn.wctx</groupId>
+            <artifactId>wctx-dao</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+        </dependency>
+    </dependencies>
+    <profiles>
+        <!-- 开发/测试环境，默认激活 -->
+        <profile>
+            <id>test</id>
+            <properties>
+                <env>test</env>
+            </properties>
+            <activation>
+                <activeByDefault>false</activeByDefault><!--默认启用的是dev环境配置 -->
+            </activation>
+        </profile>
+        <!-- 生产环境 -->
+        <profile>
+            <id>production</id>
+            <properties>
+                <env>production</env>
+            </properties>
+            <activation>
+                <activeByDefault>true</activeByDefault><!--默认启用的是dev环境配置 -->
+            </activation>
+        </profile>
+    </profiles>
+    <build>
+        <filters>
+            <!--过滤文件,通常是一个属性文件（名值对的形式）-->
+            <filter>src/main/java/jdbc/jdbc-${env}-env.properties</filter>
+        </filters>
+        <resources>
+            <resource> <!-- 配置需要被替换的资源文件路径, jdbc.properties 应该在 src/main/resource 目录下-->
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering> <!-- 是否使用过滤器 -->
+            </resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <artifactId>maven-clean-plugin</artifactId>
+            </plugin>
+            <!-- see http://maven.apache.org/ref/current/maven-core/default-bindings.html#Plugin_bindings_for_war_packaging -->
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <artifactId>maven-war-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <artifactId>maven-install-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <artifactId>maven-deploy-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+</project>
