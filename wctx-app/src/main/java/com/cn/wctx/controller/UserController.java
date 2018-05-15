@@ -8,8 +8,6 @@ import com.cn.wctx.model.user.vo.UserVo;
 import com.cn.wctx.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.Errors;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -32,11 +30,7 @@ public class UserController {
 
     @RequestMapping("common/getDetail")
     @ResponseBody
-    public Resp getDetail(@RequestBody @Valid UserVo userVo, Errors errors, HttpServletRequest request) {
-        if (errors.hasErrors()) {
-            FieldError error = errors.getFieldError();
-            return Resp.showFaild(error.getDefaultMessage());
-        }
+    public Resp getDetail(@RequestBody @Valid UserVo userVo, HttpServletRequest request) {
         User user = userService.getDetail(userVo.getId());
         return Resp.showSuccess(user);
     }
