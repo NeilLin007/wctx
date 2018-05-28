@@ -6,6 +6,8 @@ import com.cn.wctx.model.Resp;
 import com.cn.wctx.model.user.User;
 import com.cn.wctx.model.user.vo.UserVo;
 import com.cn.wctx.service.IUserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,10 +30,14 @@ public class UserController {
     @Autowired
     private IUserService userService;
 
+    Logger loggger = LoggerFactory.getLogger(UserController.class);
+
     @RequestMapping("common/getDetail")
     @ResponseBody
     public Resp getDetail(@RequestBody @Valid UserVo userVo, HttpServletRequest request) {
+        loggger.info("日志測試-----------");
         User user = userService.getDetail(userVo.getId());
+        loggger.info("日志測試結束------");
         return Resp.showSuccess(user);
     }
 }
