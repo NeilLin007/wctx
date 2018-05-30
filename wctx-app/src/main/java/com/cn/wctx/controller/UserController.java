@@ -2,10 +2,13 @@ package com.cn.wctx.controller;/**
  * Created by chuyoule on 2018/5/11.
  */
 
+import com.alibaba.fastjson.JSON;
+
 import com.cn.wctx.model.Resp;
 import com.cn.wctx.model.user.User;
 import com.cn.wctx.model.user.vo.UserVo;
 import com.cn.wctx.service.IUserService;
+import com.cn.wctx.util.JedisService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +32,8 @@ public class UserController {
 
     @Autowired
     private IUserService userService;
+    @Autowired
+    JedisService jedisService;
 
     Logger loggger = LoggerFactory.getLogger(UserController.class);
 
@@ -37,6 +42,7 @@ public class UserController {
     public Resp getDetail(@RequestBody @Valid UserVo userVo, HttpServletRequest request) {
         loggger.info("日志測試-----------");
         User user = userService.getDetail(userVo.getId());
+        jedisService.set(userVo.getId(), JSON.toJSONString(user));
         loggger.info("日志測試結束------");
         return Resp.showSuccess(user);
     }

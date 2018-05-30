@@ -33,4 +33,19 @@ public class JedisService {
         }
         return value;
     }
+
+    public String set(String key, String value) {
+        Jedis jedis = null;
+        try {
+            jedis = jedisPool.getResource();
+            jedis.set(key, value);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (null != jedis) {
+                jedis.close();
+            }
+        }
+        return value;
+    }
 }
